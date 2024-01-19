@@ -21,18 +21,16 @@ const Shop = () => {
     console.log(pages);
 
     useEffect(() => {
-        fetch('http://localhost:5000/Prodect')
+        fetch(`http://localhost:5000/Prodect?page=${currentPages}&size=${itemaPerPages}`)
             .then(res => res.json())
             .then(data => setProducts(data))
             .catch(error => console.error('Fetch error:', error));
-    }, []);
+    }, [currentPages, itemaPerPages]);
     /**
      * DONE 1: get the total number of prodects
      * DONE 2: number of items per page dynamic
      * TODO 3: get the current pages
      * **/
-
-
 
 
     useEffect(() => {
@@ -81,10 +79,22 @@ const Shop = () => {
         deleteShoppingCart();
     }
 
-    const handleItemsChange = e =>{
+    const handleItemsChange = e => {
         const val = parseInt(e.target.value);
         console.log(val)
         setitemaPerPage(val)
+        setCurrentPages(0)
+    }
+
+    const handlePrevPages = () => {
+        if (currentPages > 0) {
+            setCurrentPages(currentPages - 1);
+        }
+    }
+    const hhandleNextPages = () => {
+        if(currentPages < pages.length -1){
+            setCurrentPages(currentPages + 1)
+        }
     }
 
     return (
@@ -109,25 +119,29 @@ const Shop = () => {
                 </Cart>
             </div>
             <div className='Pagination'>
-               <p>Currnet Pages: {currentPages}</p>
-               {
-                  pages.map(page =><button
-                  onClick={() =>setCurrentPages(page)}
-                  key={page}>
-                    {
-                        page
-                    }
-                    
-                  </button>)
-            }
-            <select name={itemaPerPages} onChange={handleItemsChange} id="">
-                <option value="10">10</option>
-                <option value="20">20</option>
-                <option value="50">50</option>
-                <option value="50">60</option>
-                <option value="50">70</option>
-                <option value="50">80</option>
-            </select>
+                <p>Currnet Pages: {currentPages}</p>
+                <button onClick={handlePrevPages}>Prev</button>
+                {
+                    pages.map(page => <button
+                        className={currentPages === page && 'selected'}
+                        onClick={() => setCurrentPages(page)}
+                        key={page}>
+                        {
+                            page
+                        }
+
+                    </button>)
+                }
+                <button onClick={hhandleNextPages}>Next</button>
+                <select name={itemaPerPages} onChange={handleItemsChange} id="">
+                    <option value="20">5</option>
+                    <option value="10">10</option>
+                    <option value="20">20</option>
+                    <option value="50">50</option>
+                    <option value="50">60</option>
+                    <option value="50">70</option>
+                    <option value="50">80</option>
+                </select>
             </div>
         </div>
     );

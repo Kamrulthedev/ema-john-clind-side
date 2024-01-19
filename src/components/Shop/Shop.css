@@ -33,3 +33,6 @@
 .Pagination button{
     margin-right: 16px;
 }
+.Pagination .selected{
+    background-color: #FF9900;
+}
